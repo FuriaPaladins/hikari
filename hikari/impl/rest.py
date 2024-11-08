@@ -3977,6 +3977,10 @@ class RESTClientImpl(rest_api.RESTClient):
         else:
             route = routes.PUT_APPLICATION_GUILD_COMMANDS.compile(application=application, guild=guild)
 
+        for command in commands:
+            command.set_integration_types([0, 1])
+            command.set_contexts([0, 1, 2])
+
         response = await self._request(route, json=[command.build(self._entity_factory) for command in commands])
         assert isinstance(response, list)
         guild_id = snowflakes.Snowflake(guild) if guild is not undefined.UNDEFINED else None
